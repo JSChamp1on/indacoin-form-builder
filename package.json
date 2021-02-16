@@ -1,13 +1,18 @@
 {
   "name": "indacoin-form-builder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Indacoin form builder",
   "main": "src/App.js",
   "author": "Dmitrii Zaytsev",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JSChamp1on/indacoin-form-builder/issues"
+  },
+  "homepage": "https://github.com/JSChamp1on/indacoin-form-builder#readme",
   "scripts": {
     "dev": "NODE_ENV='development' webpack serve --mode development --config webpack.config.js --progress --profile --content-base src/development",
     "build": "NODE_ENV='production' webpack --config webpack.config.js",
+    "prepublish": "npm run build",
     "rem": "rm -rf ./lib"
   },
   "dependencies": {

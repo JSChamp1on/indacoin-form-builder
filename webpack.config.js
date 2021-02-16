@@ -12,8 +12,8 @@ const filename = PRODUCTION ? `${library}.min.js` : `${library}.js`;
 const entry = PRODUCTION ? `${__dirname}/src/production/index.js` : `${__dirname}/src/development/index.js`;
 
 let plugins = [];
-let devServer = undefined;
 let externals = undefined;
+let devServer = undefined;
 
 if (PRODUCTION) {
   externals = {
@@ -23,12 +23,12 @@ if (PRODUCTION) {
 } else {
   plugins.push(
     new HtmlWebpackPlugin({
-      template: "./src/development/index.html",
+      template: `${__dirname}/src/development/index.html`,
     })
   );
 
   devServer = {
-      contentBase: path.join(__dirname, "dist"),
+      contentBase: `${__dirname}/dist`,
       compress: true,
       port: 3000,
       historyApiFallback: true,
