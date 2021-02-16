@@ -1,0 +1,26 @@
+{
+  "name": "indacoin-form-builder",
+  "version": "1.0.0",
+  "description": "Indacoin form builder",
+  "main": "src/App.js",
+  "author": "Dmitrii Zaytsev",
+  "license": "ISC",
+  "scripts": {
+    "dev": "NODE_ENV='development' webpack serve --mode development --config webpack.config.js --progress --profile --content-base src/development",
+    "build": "NODE_ENV='production' webpack --config webpack.config.js",
+    "rem": "rm -rf ./lib"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "babel-loader": "^8.2.2",
+    "html-webpack-plugin": "^5.1.0",
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
