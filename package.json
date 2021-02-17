@@ -2,7 +2,7 @@
   "name": "indacoin-form-builder",
   "version": "1.0.1",
   "description": "Indacoin form builder",
-  "main": "src/App.js",
+  "main": "lib/indacoin-form-builder.min.js",
   "author": "Dmitrii Zaytsev",
   "license": "ISC",
   "bugs": {
