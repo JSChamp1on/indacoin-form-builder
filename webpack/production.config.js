@@ -1,5 +1,5 @@
 const library = process.env.LIBRARYNAME;
-const dirname = `${__dirname}/../`;
+const dirname = `${__dirname}/..`;
 
 module.exports = {
   entry: `${dirname}/src/production/index.js`,

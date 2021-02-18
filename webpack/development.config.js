@@ -1,10 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 
 const library = process.env.LIBRARYNAME;
-const dirname = `${__dirname}/../`;
+const dirname = `${__dirname}/..`;
 
 module.exports = {
   entry: `${dirname}/src/development/index.js`,
@@ -21,7 +22,26 @@ module.exports = {
             ]
           }
         }
-      }
+      },
+      {
+        test: /\.(scss)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: {
+                localIdentName: '[path]-[local]',
+              },
+              sourceMap: true,
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {sourceMap: true},
+          }
+        ]
+      },
     ]
   },
   output: {
@@ -32,6 +52,10 @@ module.exports = {
     umdNamedDefine: true,
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: "./static/[name].[contenthash].css",
+      chunkFilename: "[contenthash].css",
+    }),
     new HtmlWebpackPlugin({
       template: `${dirname}/src/development/index.html`,
     }),
