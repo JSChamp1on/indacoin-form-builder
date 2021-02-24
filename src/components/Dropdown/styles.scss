@@ -1,0 +1,24 @@
+.wrapper {
+    position: relative;
+    > menu {
+        position: absolute;
+        top: 44px;
+        overflow-y: auto;
+        transition: 
+            height .2s ease 0s,
+            max-height .2s ease 0s;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        background: #f7f9fa;
+        > li {
+            color: #3e3e3e;
+            transition: background-color 4s;
+            cursor: pointer;
+            &:hover {
+                background: #efefef;
+                transition: background-color .6s;
+            }
+        }
+    }
+}

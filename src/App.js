@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Storage } from './Storage';
 
 // components
-import { Worker, Design } from './components/Phone';
+import { Worker, Input } from './components/Phone';
+
 
 const storage = Storage.getInstance();
 
@@ -17,7 +18,7 @@ const App = class extends Component {
 
     render() {
         return <>
-            <Design/>
+            <Input/>
         </>;
     }
 };

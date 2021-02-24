@@ -24,7 +24,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(scss)$/,
+        test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -41,6 +41,15 @@ module.exports = {
             options: {sourceMap: true},
           }
         ]
+      },
+      {
+        test: /\.svg$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: '[path][name].[hash].[ext]',
+          },
+        },
       },
     ]
   },

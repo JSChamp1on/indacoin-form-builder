@@ -1,11 +1,11 @@
 import './utils';
 import allCountries from './data';
 import { Worker } from './Worker';
-import { Design } from './Design';
+import { Input } from './Input';
 
 
 export {
     allCountries,
     Worker,
-    Design,
+    Input,
 };
