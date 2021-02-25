@@ -21,6 +21,7 @@ const Input = class extends Component {
 
         this.state = {
             showList: false,
+            value: '',
         };
 
         this.positionMenu = props.positionMenu;
@@ -31,20 +32,21 @@ const Input = class extends Component {
     renderDdropdown() {
         const 
         {
+            button,
             items,
             render,
-            selected,
+            onSelected,
             maxHeight,
         } = this.props,
         {
             showList,
         } = this.state;
 
-        const selectedAndCloseMenu = (item, index) => {
+        const selected = (item, index, event) => {
             this.setState({ showList: false });
 
-            if (typeof selected === 'function') {
-                selected(item, index);
+            if (typeof onSelected === 'function') {
+                onSelected(item, index, event);
             }
         };
 
@@ -80,7 +82,7 @@ const Input = class extends Component {
                     ),
                 }}
                 onClick={() => this.setState({ showList: !showList })}
-            >USD</button>
+            >{ button }</button>
             <Dropdown
                 useShow={{
                     set: showList,
@@ -88,7 +90,7 @@ const Input = class extends Component {
                 }}
                 items={items}
                 render={render}
-                selected={selectedAndCloseMenu}
+                selected={selected}
                 positionMenu={
                     this.positionMenu === POSITIONMENURIGHT
                     ? 'right'
@@ -100,10 +102,20 @@ const Input = class extends Component {
     }
 
     renderInput() {
+        const {
+            label,
+            value,
+            onChange,
+            onPaste,
+            onFocus,
+            onBlur,
+        } = this.props;
+
         return <>
             <input
                 ref={this.input}
                 type={'text'}
+                className={value ? styles.used : null}
                 style={{
                     width: (
                         (
@@ -121,6 +133,11 @@ const Input = class extends Component {
                         || '22px'
                     ),
                 }}
+                value={value}
+                onChange={onChange}
+                onPaste={onPaste}
+                onFocus={onFocus}
+                onBlur={onBlur}
             />
             <label 
                 style={{
@@ -131,7 +148,7 @@ const Input = class extends Component {
                     ),
                 }}
                 onClick={() => this.input.current.focus()}
-            >label</label>
+            >{ label }</label>
         </>;
     }
 

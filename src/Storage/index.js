@@ -1,10 +1,12 @@
-import { STORAGE } from '../constants.json';
+import { STORAGE, OPTIONS } from '../constants.json';
 
 
-const {
+const
+{
     // Phone
     PHONEALLCOUNTRIES,
     PHONEBLOCKEDCOUNTRIES,
+    PHONEVALUE,
     PHONENUMBER,
     PHONEALPHA2,
     PHONECOUNTRY,
@@ -13,16 +15,22 @@ const {
     PHONEERRORBOOLEAN,
     PHONENATIONALFORMAT,
     PHONEINTERNATIONALFORMAT,
-} = STORAGE;
+} = STORAGE,
+{
+    LNG,
+} = OPTIONS;
 
 let instance = null;
 
 export const Storage = class {
     constructor() {
         this.state = {
+            // i18n
+            [LNG]: '',
             // Phone
             [PHONEALLCOUNTRIES]: [],
             [PHONEBLOCKEDCOUNTRIES]: [],
+            [PHONEVALUE]: '',
             [PHONENUMBER]: '',
             [PHONEALPHA2]: '',
             [PHONECOUNTRY]: '',

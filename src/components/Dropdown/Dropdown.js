@@ -71,9 +71,9 @@ const Dropdown = class extends Component {
             height,
         } = this.state;
 
-        const onClick = (item, index) => {
+        const onClick = (item, index, event) => {
             if (typeof selected === 'function') {
-                selected(item, index);
+                selected(item, index, event);
             }
         };
 
@@ -89,7 +89,7 @@ const Dropdown = class extends Component {
                     {
                         items.map((item, index) => <li
                             key={index}
-                            onClick={onClick}
+                            onClick={(event) => onClick(item, index, event)}
                         >{ render(item, index) }</li>)
                     }
                 </menu>

@@ -37,7 +37,7 @@ export const Worker = class {
         this.INTERNATIONAL = this.intlTelInputUtils.numberFormat.INTERNATIONAL;
         this.NATIONAL = this.intlTelInputUtils.numberFormat.NATIONAL;
 
-        this.regexp = number => `+${String(number).replace(/\D/g, '')}`;
+        this.regexp = number => String(number).replace(/\D/g, '');
 
         storage.store({ [PHONEALLCOUNTRIES]: allCountries });
     }
@@ -46,7 +46,7 @@ export const Worker = class {
         return Array.isArray(countries) && countries || [];
     }
 
-    handyman({ phone, alpha2, blockedCountries }) {
+    handyman({ phone, alpha2, blockedCountries }, callback) {
         let store = {};
 
         // phone handling
@@ -79,8 +79,23 @@ export const Worker = class {
         if (blockedCountries) {
             store[PHONEBLOCKEDCOUNTRIES] = this.updateBlockedCountries({ countries: blockedCountries });
         }
+        
+        const mergeStore = {
+            ...storage.store(),
+            ...store,
+        };
 
-        return storage.store(store);
+        if (callback === false) {
+            return mergeStore;
+        }
+
+        if (typeof callback === 'function') {
+            callback(mergeStore);
+
+            return mergeStore;
+        }
+
+        return storage.store(mergeStore);
     }
 
     readCode({ alpha2 }) {
@@ -102,7 +117,7 @@ export const Worker = class {
             return null;
         }
 
-        const number = this.regexp(phone);
+        const number = `+${this.regexp(phone)}`;
 
         const
         sort = ({ priority: a }, { priority: b }) => b - a,
@@ -127,7 +142,7 @@ export const Worker = class {
             return null;
         }
 
-        const number = this.regexp(phone);
+        const number = `+${this.regexp(phone)}`;
 
         return this.intlTelInputUtils.formatNumber(number, null, this.INTERNATIONAL);
     }
@@ -137,7 +152,7 @@ export const Worker = class {
             return null;
         }
 
-        const number = this.regexp(phone);
+        const number = `+${this.regexp(phone)}`;
 
         return this.intlTelInputUtils.formatNumber(number, null, this.NATIONAL);
     }
@@ -168,7 +183,7 @@ export const Worker = class {
 
         const number = this.regexp(phone);
 
-        let errorCode = this.intlTelInputUtils.getValidationError(number);
+        let errorCode = this.intlTelInputUtils.getValidationError(`+${number}`);
 
         if (!alpha2) {
             alpha2 = this.country({ phone: number }).alpha2;

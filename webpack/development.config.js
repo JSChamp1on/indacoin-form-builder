@@ -8,7 +8,7 @@ const library = process.env.LIBRARYNAME;
 const dirname = `${__dirname}/..`;
 
 module.exports = {
-  entry: `${dirname}/src/development/index.js`,
+  entry: ['@babel/polyfill', `${dirname}/src/development/index.js`],
   module: {
     rules: [
       {
@@ -43,11 +43,13 @@ module.exports = {
         ]
       },
       {
-        test: /\.svg$/,
+        test: /\.(svg|png)$/,
         use: {
           loader: "file-loader",
           options: {
             name: '[path][name].[hash].[ext]',
+            publicPath: '/static/images',
+            outputPath: 'static/images',
           },
         },
       },
@@ -72,7 +74,7 @@ module.exports = {
   devServer: {
     contentBase: `${dirname}/dist`,
     compress: true,
-    port: 3000,
+    port: 3001,
     historyApiFallback: true,
   },
 };

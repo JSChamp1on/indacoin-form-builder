@@ -1,0 +1,12 @@
+{
+    "phone": {
+        "errors": {
+            "INVALID_COUNTRY_CODE": "",
+            "INVALID_LENGTH": "Invalid length",
+            "IS_POSSIBLE_LOCAL_ONLY": "Only possible locally",
+            "TOO_LONG": "Too long",
+            "TOO_SHORT": "Too short",
+            "BLOCKED_COUNTRY": "Blocked country"
+        }
+    }
+}
