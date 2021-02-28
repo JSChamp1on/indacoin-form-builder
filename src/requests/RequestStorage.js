@@ -1,38 +1,17 @@
-import { STORAGE } from './../constants.json';
+// constants
+import { REQUESTS } from './../constants.json';
 const
 {
-    // Phone
-    PHONEALLCOUNTRIES,
-    PHONEBLOCKEDCOUNTRIES,
-    PHONEVALUE,
-    PHONENUMBER,
-    PHONEALPHA2,
-    PHONECOUNTRY,
-    PHONEDIALCODE,
-    PHONEERRORSTRING,
-    PHONEERRORBOOLEAN,
-    PHONENATIONALFORMAT,
-    PHONEINTERNATIONALFORMAT,
-} = STORAGE;
+    GETCOINCONVERTAMOUNT,
+} = REQUESTS;
 
 let instance = null;
 
 
-export const Storage = class {
+export const RequestStorage = class {
     constructor() {
         this.state = {
-            // Phone
-            [PHONEALLCOUNTRIES]: [],
-            [PHONEBLOCKEDCOUNTRIES]: [],
-            [PHONEVALUE]: '',
-            [PHONENUMBER]: '',
-            [PHONEALPHA2]: '',
-            [PHONECOUNTRY]: '',
-            [PHONEDIALCODE]: '',
-            [PHONEERRORSTRING]: '',
-            [PHONEERRORBOOLEAN]: false,
-            [PHONENATIONALFORMAT]: '',
-            [PHONEINTERNATIONALFORMAT]: '',
+            [GETCOINCONVERTAMOUNT]: {},
         };
 
         this.callbacks = [];

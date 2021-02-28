@@ -16,6 +16,18 @@
         "POSITIONMENULEFT": "MENULEFT",
         "POSITIONMENURIGHT": "MENURIGHT"
     },
+    "XHR": {
+        "GET": "GET",
+        "POST": "POST",
+        "DONE": "DONE",
+        "HEADERS_RECEIVED": "HEADERS_RECEIVED",
+        "LOADING": "LOADING",
+        "OPENED": "OPENED",
+        "UNSENT": "UNSENT"
+    },
+    "REQUESTS": {
+        "GETCOINCONVERTAMOUNT": "GetCoinConvertAmount"
+    },
     "PHONE": {
         "INVALID_COUNTRY_CODE": "INVALID_COUNTRY_CODE",
         "INVALID_LENGTH": "INVALID_LENGTH",

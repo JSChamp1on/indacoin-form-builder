@@ -14,54 +14,21 @@ import { STORAGE, OPTIONS, PHONE } from '../../constants.json';
 const 
 {
     PHONEALLCOUNTRIES,
-    PHONEBLOCKEDCOUNTRIES,
+    // PHONEBLOCKEDCOUNTRIES,
     PHONEVALUE,
-    PHONENUMBER,
+    // PHONENUMBER,
     PHONEALPHA2,
     PHONECOUNTRY,
-    PHONEDIALCODE,
-    PHONEERRORSTRING,
-    PHONEERRORBOOLEAN,
-    PHONENATIONALFORMAT,
-    PHONEINTERNATIONALFORMAT,
-} = STORAGE,
-{
-    LABEL,
-    IS_POSSIBLE,
-} = PHONE;
+    // PHONEDIALCODE,
+    // PHONEERRORSTRING,
+    // PHONEERRORBOOLEAN,
+    // PHONENATIONALFORMAT,
+    // PHONEINTERNATIONALFORMAT,
+} = STORAGE;
 
 
 
 const storage = Storage.getInstance();
-
-
-const test = async () => {
-
-    // http://ovh.net/files/100Mb.dat
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://indacoin.com/inner/RefreshPairDataNew', true);
-    xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    xhr.onprogress = (event) => {
-        console.log(event)
-        const { loaded, total } = event;
-        console.log(total && `${Math.round(loaded / total * 100)}%` || `${loaded} byte`);
-    }
-    xhr.onreadystatechange = () => {
-        // DONE: 4 // запрос завершен и ответ готов
-        // HEADERS_RECEIVED: 2 // запрос получен
-        // LOADING: 3 // обработка запроса
-        // OPENED: 1 // установлено соединение с сервером
-        // UNSENT: 0 // запрос не инициализирован
-        console.log(xhr)
-        console.log('readyState: ', xhr.readyState);
-    }
-    xhr.send(JSON.stringify({
-        pair: "INDA_ETH"
-    }));
-};
-test();
-
 
 const Input = class extends Component {
     constructor() {

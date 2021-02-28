@@ -71,6 +71,11 @@ module.exports = {
       template: `${dirname}/src/development/index.html`,
     }),
   ],
+  resolve: {
+    alias: {
+      '@requests': path.join(`${__dirname}/..`, 'src', 'requests'),
+    }
+  },
   devServer: {
     contentBase: `${dirname}/dist`,
     compress: true,
