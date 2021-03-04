@@ -8,7 +8,7 @@ import { RequestsStorage } from '@storage';
 import { REQUESTS } from '../../constants.json';
 
 const {
-    GETCOINCONVERTAMOUNT,
+    MOBGETCURRENCIESINFO,
 } = REQUESTS;
 
 const requestStorage = RequestsStorage.getInstance();
@@ -16,7 +16,7 @@ const requestStorage = RequestsStorage.getInstance();
 let instance = null;
 
 
-export const GetCoinConvertAmount = class extends BaseRequest {
+export const MobGetCurrenciesInfo = class extends BaseRequest {
     static getInstance() {
         if (instance === null) {
             instance = new this;
@@ -31,19 +31,19 @@ export const GetCoinConvertAmount = class extends BaseRequest {
         this.promise = null;
     }
 
-    request({ currencyIn, currencyOut, amount, partner }) {
-        const url = `/api/GetCoinConvertAmount/${currencyIn}/${currencyOut}/${amount}/${partner}`;
+    request() {
+        const url = `https://indacoin.com/api/uni/mobgetcurrenciesinfoi/1`;
 
         const onReadyChange = ({ readyState, status }) => requestStorage.store({
-            [GETCOINCONVERTAMOUNT]: {
-                ...requestStorage.store()[GETCOINCONVERTAMOUNT],
+            [MOBGETCURRENCIESINFO]: {
+                ...requestStorage.store()[MOBGETCURRENCIESINFO],
                 readyState,
                 status,
             },
         });
         const onProgress = ({ percent, byte }) => requestStorage.store({
-            [GETCOINCONVERTAMOUNT]: {
-                ...requestStorage.store()[GETCOINCONVERTAMOUNT],
+            [MOBGETCURRENCIESINFO]: {
+                ...requestStorage.store()[MOBGETCURRENCIESINFO],
                 percent,
                 byte,
             },

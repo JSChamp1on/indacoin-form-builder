@@ -1,6 +1,6 @@
 import { allCountries } from '.';
 
-import { Storage } from '../../Storage';
+import { GlobalStorage } from '@storage';
 
 // constants
 import { STORAGE, PHONE } from '../../constants.json';
@@ -27,7 +27,7 @@ const {
 } = PHONE;
 
 
-const storage = Storage.getInstance();
+const storage = GlobalStorage.getInstance();
 
 export const Worker = class {
     constructor() {

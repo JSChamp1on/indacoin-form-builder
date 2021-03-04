@@ -71,6 +71,8 @@ const Dropdown = class extends Component {
             height,
         } = this.state;
 
+        const logicalHeight = height ? maxHeight <= height && maxHeight || height : 0;
+
         const onClick = (item, index, event) => {
             if (typeof selected === 'function') {
                 selected(item, index, event);
@@ -82,7 +84,7 @@ const Dropdown = class extends Component {
                 <menu
                     ref={this.refMenu}
                     style={{
-                        height: height ? maxHeight || height : 0,
+                        height: logicalHeight,
                         [positionMenu]: 0,
                     }}
                 >

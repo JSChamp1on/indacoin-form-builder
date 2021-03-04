@@ -1,5 +1,5 @@
 import { Worker } from '.';
-import { Storage } from '../../Storage';
+import { GlobalStorage } from '@storage';
 
 // constants
 import { STORAGE, PHONE } from '../../constants.json';
@@ -30,7 +30,7 @@ const
 
 
 const worker = new Worker();
-const storage = Storage.getInstance();
+const storage = GlobalStorage.getInstance();
 const errorsControl = {};
 
 const callback = (store, nationalFormatBool = false) => {

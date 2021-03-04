@@ -3,28 +3,22 @@ import React, { Component } from 'react';
 
 // styles
 import styles from './styles.scss';
-import flags from './flags.scss';
 
 // components
-import { Input as BasicInput } from '../Input';
+import { Input as BasicInput } from '@components/Input';
 import { GlobalStorage } from '@storage';
 import { event } from '.';
 
 // constants
-import { STORAGE, OPTIONS, PHONE } from '../../constants.json';
+import { STORAGE, OPTIONS } from '../../constants.json';
 const 
 {
-    PHONEALLCOUNTRIES,
-    // PHONEBLOCKEDCOUNTRIES,
-    PHONEVALUE,
-    // PHONENUMBER,
-    PHONEALPHA2,
-    PHONECOUNTRY,
-    // PHONEDIALCODE,
-    // PHONEERRORSTRING,
-    // PHONEERRORBOOLEAN,
-    // PHONENATIONALFORMAT,
-    // PHONEINTERNATIONALFORMAT,
+    AMOUNTFEUDALCURRENCY,
+    AMOUNTCRYPTOCURRENCY,
+    AMOUNTVALUEFEUDAL,
+    AMOUNTVALUECRYPTO,
+    AMOUNTCURRENCYIN,
+    AMOUNTCURRENCYOUT,
 } = STORAGE;
 
 const globalStorage = GlobalStorage.getInstance();
@@ -35,9 +29,9 @@ const Input = class extends Component {
         super();
 
         this.state = {
-            country: '',
-            alpha2: '',
+            items: [],
             value: '',
+            currency: '',
             error: '',
         };
     }
@@ -51,18 +45,17 @@ const Input = class extends Component {
     }
 
     subscription(state) {
-        const { onError } = this.props;
+        const { target, onError } = this.props;
         let error = event.onError({ id: 1 });
-        
+
         if (typeof onError === 'function') {
             error = onError(error) || error;
         }
-
+        
         this.setState({
-            value: state[PHONEVALUE],
-            country: state[PHONECOUNTRY],
-            alpha2: state[PHONEALPHA2],
-            error,
+            items: state[AMOUNTFEUDALCURRENCY],
+            value: state[AMOUNTVALUEFEUDAL],
+            currency: state[AMOUNTCURRENCYIN],
         });
     }
 
@@ -72,24 +65,22 @@ const Input = class extends Component {
             label,
         } = this.props,
         {
-            country,
-            alpha2,
+            items,
             value,
+            currency,
             error,
         } = this.state;
 
         return (
             <BasicInput
-                button={<i className={`${flags.iti_flag} ${alpha2 && flags[`iti_${alpha2}`]}`}/>}
-                label={`${label || 'Phone'} ${country}`}
-                positionMenu={OPTIONS.POSITIONMENULEFT}
-                items={globalStorage.store()[PHONEALLCOUNTRIES]}
-                render={({ name, iso2, dialCode }) => {
+                button={currency}
+                label={`${label || 'Amount'}`}
+                positionMenu={OPTIONS.POSITIONMENURIGHT}
+                items={items}
+                render={({ short_name }) => {
                     return (
                         <div className={styles.renderBasicInput}>
-                            <i className={`${flags.iti_flag} ${flags[`iti_${iso2}`]}`}/>
-                            <span>{ `+${dialCode}` }</span>
-                            <span>{ name }</span>
+                            <span>{ short_name }</span>
                         </div>
                     );
                 }}

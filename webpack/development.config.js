@@ -73,7 +73,11 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      '@requests': path.join(`${__dirname}/..`, 'src', 'requests'),
+      '@assets': path.join(dirname, 'src', 'assets'),
+      '@components': path.join(dirname, 'src', 'components'),
+      '@languages': path.join(dirname, 'src', 'languages'),
+      '@requests': path.join(dirname, 'src', 'requests'),
+      '@storage': path.join(dirname, 'src', 'storage'),
     }
   },
   devServer: {

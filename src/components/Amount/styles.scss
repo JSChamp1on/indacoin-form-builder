@@ -1,0 +1,13 @@
+.renderBasicInput {
+    // flexbox
+    display: flex;
+    align-items: center;
+    > * {
+        flex: 0 1 auto;
+    }
+    
+    // styles
+    width: 71px;
+    height: 50px;
+    padding: 0 6px;
+}

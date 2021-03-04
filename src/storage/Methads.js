@@ -1,33 +1,4 @@
-// constants
-import { REQUESTS } from './../constants.json';
-const
-{
-    GETCOINCONVERTAMOUNT,
-} = REQUESTS;
-
-let instance = null;
-
-
-export const RequestStorage = class {
-    constructor() {
-        this.state = {
-            [GETCOINCONVERTAMOUNT]: {},
-        };
-
-        this.callbacks = [];
-    }
-
-    /**
-     * Singleton
-     */
-    static getInstance() {
-        if (instance === null) {
-            instance = new this;
-        }
-
-        return instance;
-    }
-
+export const Methods = class {
     /**
      * Store state
      * set object and return state
@@ -39,7 +10,7 @@ export const RequestStorage = class {
                 ...this.state,
                 ...object,
             };
-
+            
             this.callbacks.forEach(item => item(this.state));
         }
 
@@ -52,9 +23,10 @@ export const RequestStorage = class {
      */
     set subscription(callback) {
         if (typeof callback === 'function') {
-            if (!this.callbacks.some(item => item.toString() === callback.toString())) {
-                this.callbacks.push(callback);
-            }
+            this.callbacks.push(callback);
+            callback(this.state);
+        } else {
+            console.error('this callback is not function');
         }
     }
 
