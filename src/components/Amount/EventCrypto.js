@@ -1,16 +1,17 @@
-import { Worker } from '.';
+// storage
 import { GlobalStorage } from '@storage';
 
 // constants
 import { STORAGE, PHONE } from '../../constants.json';
+
 const 
 {
     AMOUNTVALUEFEUDAL,
     AMOUNTVALUECRYPTO,
     AMOUNTFEUDALCURRENCY,
     AMOUNTCRYPTOCURRENCY,
-    AMOUNTCURRENCYIN,
-    AMOUNTCURRENCYOUT,
+    AMOUNTCURRENCYFIAT,
+    AMOUNTCURRENCYCRYPTO,
 } = STORAGE,
 {
     // INVALID_COUNTRY_CODE,
@@ -23,24 +24,8 @@ const
 } = PHONE;
 
 
-const worker = new Worker();
 const globalStorage = GlobalStorage.getInstance();
 const errorsControl = {};
-
-// const callback = (store, nationalFormatBool = false) => {
-//     storage.store({
-//         ...store,
-//         [PHONEVALUE]: (
-//             nationalFormatBool
-//             ? (
-//                 store[PHONEERRORSTRING] === IS_POSSIBLE
-//                 ? store[PHONENATIONALFORMAT]
-//                 : store[PHONEINTERNATIONALFORMAT]
-//             )
-//             : store[PHONEINTERNATIONALFORMAT]
-//         ).replace(/^\+(?!.+)$/, ''),
-//     });
-// };
 
 export const onChange = ({ target }) => {
     const { value } = target;
@@ -59,7 +44,7 @@ export const onChange = ({ target }) => {
     });
 
     globalStorage.store({
-        [AMOUNTVALUEFEUDAL]: actualAmount,
+        [AMOUNTVALUECRYPTO]: actualAmount,
     });
 };
 
@@ -86,10 +71,10 @@ export const onBlur = ({ target }) => {
 export const onSelected = ({ short_name: s_name }) => {
     const store = globalStorage.store();
 
-    const { short_name } = store[AMOUNTFEUDALCURRENCY].find(({ short_name }) => short_name === s_name);
+    const { short_name } = store[AMOUNTCRYPTOCURRENCY].find(({ short_name }) => short_name === s_name);
 
     globalStorage.store({
-        [AMOUNTCURRENCYIN]: short_name,
+        [AMOUNTCURRENCYCRYPTO]: short_name,
     });
 };
 

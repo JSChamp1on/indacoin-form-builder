@@ -7,7 +7,7 @@ const {
     HEADERS_RECEIVED,
     LOADING,
     OPENED,
-    UNSENT
+    UNSENT,
 } = XHR;
 
 const DEVDOMAIN = 'https://indacoin.com';

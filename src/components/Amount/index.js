@@ -3,24 +3,49 @@ import React from 'react';
 
 // classes
 import { Worker } from './Worker';
-import { Input as AmountFeudal } from './InputFeudal';
+import { Input as AmountFiat } from './InputFiat';
 import { Input as AmountCrypto } from './InputCrypto';
-import { onChange, onPaste, onFocus, onBlur, onError, onSelected } from './Event';
+import {
+    onChange as onChangeFiat,
+    onPaste as onPasteFiat,
+    onFocus as onFocusFiat,
+    onBlur as onBlurFiat,
+    onError as onErrorFiat,
+    onSelected as onSelectedFiat,
+} from './EventFiat';
+import {
+    onChange as onChangeCrypto,
+    onPaste as onPasteCrypto,
+    onFocus as onFocusCrypto,
+    onBlur as onBlurCrypto,
+    onError as onErrorCrypto,
+    onSelected as onSelectedCrypto,
+} from './EventCrypto';
 
-// constants
-import { OPTIONS } from '../../constants.json';
 
+new Worker();
 
 export const event = {
-    onChange,
-    onPaste,
-    onFocus,
-    onBlur,
-    onError,
-    onSelected,
+    fiatcurrency: {
+        onChange: onChangeFiat,
+        onPaste: onPasteFiat,
+        onFocus: onFocusFiat,
+        onBlur: onBlurFiat,
+        onError: onErrorFiat,
+        onSelected: onSelectedFiat,
+    },
+    cryptocurrency: {
+        onChange: onChangeCrypto,
+        onPaste: onPasteCrypto,
+        onFocus: onFocusCrypto,
+        onBlur: onBlurCrypto,
+        onError: onErrorCrypto,
+        onSelected: onSelectedCrypto,
+    },
 };
+;
 export const Input = {
-    feudalcurrency: (props) => <AmountFeudal {...props}/>,
+    fiatcurrency: (props) => <AmountFiat {...props}/>,
     cryptocurrency: (props) => <AmountCrypto {...props}/>,
 };
 export {

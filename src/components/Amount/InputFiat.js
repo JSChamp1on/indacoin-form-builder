@@ -17,8 +17,8 @@ const
     AMOUNTCRYPTOCURRENCY,
     AMOUNTVALUEFEUDAL,
     AMOUNTVALUECRYPTO,
-    AMOUNTCURRENCYIN,
-    AMOUNTCURRENCYOUT,
+    AMOUNTCURRENCYFIAT,
+    AMOUNTCURRENCYCRYPTO,
 } = STORAGE;
 
 const globalStorage = GlobalStorage.getInstance();
@@ -46,7 +46,7 @@ const Input = class extends Component {
 
     subscription(state) {
         const { target, onError } = this.props;
-        let error = event.onError({ id: 1 });
+        let error = event.fiatcurrency.onError({ id: 1 });
 
         if (typeof onError === 'function') {
             error = onError(error) || error;
@@ -55,7 +55,7 @@ const Input = class extends Component {
         this.setState({
             items: state[AMOUNTFEUDALCURRENCY],
             value: state[AMOUNTVALUEFEUDAL],
-            currency: state[AMOUNTCURRENCYIN],
+            currency: state[AMOUNTCURRENCYFIAT],
         });
     }
 
@@ -87,11 +87,11 @@ const Input = class extends Component {
                 maxHeight={400}
                 value={value}
                 error={error}
-                onSelected={event.onSelected}
-                onChange={event.onChange}
-                onPaste={event.onPaste}
-                onFocus={event.onFocus}
-                onBlur={event.onBlur}
+                onSelected={event.fiatcurrency.onSelected}
+                onChange={event.fiatcurrency.onChange}
+                onPaste={event.fiatcurrency.onPaste}
+                onFocus={event.fiatcurrency.onFocus}
+                onBlur={event.fiatcurrency.onBlur}
             />
         );
     }

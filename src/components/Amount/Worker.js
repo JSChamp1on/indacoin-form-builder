@@ -15,18 +15,15 @@ const {
 const mobGetCurrenciesInfo = MobGetCurrenciesInfo.getInstance();
 const globalStorage = GlobalStorage.getInstance();
 
-
 export const Worker = class {
     constructor() {
-        this._mobGetCurrenciesInfo_startRequest = true;
         this.mobGetCurrenciesInfo();
     }
 
     mobGetCurrenciesInfo() {
         const store = globalStorage.store();
-        if (this._mobGetCurrenciesInfo_startRequest && !store[AMOUNTFEUDALCURRENCY].length && !store[AMOUNTCRYPTOCURRENCY].length) {
-            this._mobGetCurrenciesInfo_startRequest = false;
 
+        if (!store[AMOUNTFEUDALCURRENCY].length && !store[AMOUNTCRYPTOCURRENCY].length) {
             const
             successCallback = ({ data }) => {
                 const { result } = JSON.parse(data);

@@ -22,8 +22,8 @@ const
     AMOUNTVALUECRYPTO,
     AMOUNTFEUDALCURRENCY,
     AMOUNTCRYPTOCURRENCY,
-    AMOUNTCURRENCYIN,
-    AMOUNTCURRENCYOUT,
+    AMOUNTCURRENCYFIAT,
+    AMOUNTCURRENCYCRYPTO,
 } = STORAGE;
 
 let instance = null;
@@ -62,8 +62,8 @@ export const GlobalStorage = class extends Methods {
             [AMOUNTVALUECRYPTO]: '',
             [AMOUNTFEUDALCURRENCY]: [],
             [AMOUNTCRYPTOCURRENCY]: [],
-            [AMOUNTCURRENCYIN]: '',
-            [AMOUNTCURRENCYOUT]: '',
+            [AMOUNTCURRENCYFIAT]: '',
+            [AMOUNTCURRENCYCRYPTO]: '',
         };
 
         this.callbacks = [];

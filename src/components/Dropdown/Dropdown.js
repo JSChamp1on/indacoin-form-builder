@@ -41,9 +41,12 @@ const Dropdown = class extends Component {
     }
 
     handleClick(e) {
-        const { get } = this.props.useShow;
+        const {
+            refsIgnore = [],
+            useShow: { get },
+        } = this.props;
 
-        if (e.path[0].tagName !== 'BUTTON' && !e.path.some(item => item.tagName && this.refMenu.current.contains(item))) {
+        if (!refsIgnore.some(ref => (ref?.current || ref) === e.path[0]) && !e.path.some(item => item.tagName && this.refMenu.current.contains(item))) {
             if (typeof get === 'function') {
                 get(false);
             }

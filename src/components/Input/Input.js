@@ -26,7 +26,8 @@ const Input = class extends Component {
 
         this.positionMenu = props.positionMenu;
 
-        this.input = createRef();
+        this.buttonRef = createRef();
+        this.inputRef = createRef();
     }
 
     renderDdropdown() {
@@ -52,6 +53,7 @@ const Input = class extends Component {
 
         return <>
             <button 
+                ref={this.buttonRef}
                 type={'button'}
                 style={{
                     width: 100,
@@ -88,6 +90,7 @@ const Input = class extends Component {
                     set: showList,
                     get: showList => this.setState({ showList }),
                 }}
+                refsIgnore={[this.buttonRef]}
                 items={items}
                 render={render}
                 selected={selected}
@@ -113,7 +116,7 @@ const Input = class extends Component {
 
         return <>
             <input
-                ref={this.input}
+                ref={this.inputRef}
                 type={'text'}
                 className={value ? styles.used : null}
                 style={{
@@ -147,7 +150,7 @@ const Input = class extends Component {
                         : '20px'
                     ),
                 }}
-                onClick={() => this.input.current.focus()}
+                onClick={() => this.inputRef.current.focus()}
             >{ label }</label>
         </>;
     }

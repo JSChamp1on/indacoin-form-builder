@@ -25,7 +25,7 @@ const App = class extends Component {
     render() {
         return <>
             <Phone/>
-            <Amount.feudalcurrency/>
+            <Amount.fiatcurrency/>
             <Amount.cryptocurrency/>
         </>;
     }
