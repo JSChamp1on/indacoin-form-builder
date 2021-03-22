@@ -31,40 +31,64 @@ export const GetCoinConvertAmount = class extends BaseRequest {
         this.promise = null;
     }
 
-    request({ currencyIn, currencyOut, amount, partner }) {
-        const url = `/api/GetCoinConvertAmount/${currencyIn}/${currencyOut}/${amount}/${partner}`;
+    request({ currencyIn, currencyOut, amount, partner, onReadyChange: readyChange, onProgress: progress } = {}) {
+        if (currencyIn && currencyOut && amount) {
+            const url = `/api/GetCoinConvertAmount/${currencyIn}/${currencyOut}/${amount}${partner !== undefined ? `/${partner}` : ''}`;
 
-        const onReadyChange = ({ readyState, status }) => requestStorage.store({
-            [GETCOINCONVERTAMOUNT]: {
-                ...requestStorage.store()[GETCOINCONVERTAMOUNT],
-                readyState,
-                status,
-            },
-        });
-        const onProgress = ({ percent, byte }) => requestStorage.store({
-            [GETCOINCONVERTAMOUNT]: {
-                ...requestStorage.store()[GETCOINCONVERTAMOUNT],
-                percent,
-                byte,
-            },
-        });
+            const onReadyChange = ({ readyState, status }) => {
+                requestStorage.store({
+                    [GETCOINCONVERTAMOUNT]: {
+                        ...requestStorage.store()[GETCOINCONVERTAMOUNT],
+                        readyState,
+                        status,
+                    },
+                });
 
-        this.promise = new Promise((resolve, reject) => this.get({
-            url,
-            onReadyChange,
-            onProgress,
-        }).then(resolve, reject));
+                if (typeof readyChange === 'function') {
+                    readyChange({
+                        readyState,
+                        status,
+                    });
+                }
+            };
+            
+            const onProgress = ({ percent, byte }) => {
+                    requestStorage.store({
+                    [GETCOINCONVERTAMOUNT]: {
+                        ...requestStorage.store()[GETCOINCONVERTAMOUNT],
+                        percent,
+                        byte,
+                    },
+                });
+
+                if (typeof progress === 'function') {
+                    progress({
+                        percent,
+                        byte,
+                    });
+                }
+            };
+
+            this.promise = new Promise((resolve, reject) => this.get({
+                url,
+                onReadyChange,
+                onProgress,
+            }).then(resolve, reject));
+        }
+        
 
         return instance;
     }
 
     response({ successCallback, failedCallback }) {
-        if (typeof successCallback === 'function') {
-            this.promise.then(successCallback);
-        }
-        
-        if (typeof failedCallback === 'function') {
-            this.promise.catch(failedCallback);
+        if (this.promise) {
+            if (typeof successCallback === 'function' && typeof this.promise.then === 'function') {
+                this.promise.then(successCallback);
+            }
+
+            if (typeof failedCallback === 'function' && typeof this.promise.catch === 'function') {
+                this.promise.catch(failedCallback);
+            }
         }
     }
 };

@@ -112,6 +112,7 @@ const Input = class extends Component {
             onPaste,
             onFocus,
             onBlur,
+            disabled,
         } = this.props;
 
         return <>
@@ -141,6 +142,7 @@ const Input = class extends Component {
                 onPaste={onPaste}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                disabled={disabled}
             />
             <label 
                 style={{

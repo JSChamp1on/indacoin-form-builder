@@ -18,9 +18,9 @@ const
     PHONENATIONALFORMAT,
     PHONEINTERNATIONALFORMAT,
     // Amounts
-    AMOUNTVALUEFEUDAL,
+    AMOUNTVALUEIN,
     AMOUNTVALUECRYPTO,
-    AMOUNTFEUDALCURRENCY,
+    AMOUNTFIATCURRENCY,
     AMOUNTCRYPTOCURRENCY,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
@@ -58,9 +58,9 @@ export const GlobalStorage = class extends Methods {
             [PHONENATIONALFORMAT]: '',
             [PHONEINTERNATIONALFORMAT]: '',
             // Amounts
-            [AMOUNTVALUEFEUDAL]: '',
+            [AMOUNTVALUEIN]: '',
             [AMOUNTVALUECRYPTO]: '',
-            [AMOUNTFEUDALCURRENCY]: [],
+            [AMOUNTFIATCURRENCY]: [],
             [AMOUNTCRYPTOCURRENCY]: [],
             [AMOUNTCURRENCYFIAT]: '',
             [AMOUNTCURRENCYCRYPTO]: '',

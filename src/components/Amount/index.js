@@ -23,7 +23,7 @@ import {
 } from './EventCrypto';
 
 
-new Worker();
+new Worker().mobGetCurrenciesInfo();
 
 export const event = {
     fiatcurrency: {

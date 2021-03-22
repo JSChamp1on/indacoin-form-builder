@@ -1,3 +1,6 @@
+// worker
+import { Worker } from '.';
+
 // storage
 import { GlobalStorage } from '@storage';
 
@@ -5,9 +8,9 @@ import { GlobalStorage } from '@storage';
 import { STORAGE, PHONE } from '../../constants.json';
 const 
 {
-    AMOUNTVALUEFEUDAL,
+    AMOUNTVALUEIN,
     AMOUNTVALUECRYPTO,
-    AMOUNTFEUDALCURRENCY,
+    AMOUNTFIATCURRENCY,
     AMOUNTCRYPTOCURRENCY,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
@@ -22,36 +25,53 @@ const
     // BLOCKED_COUNTRY,
 } = PHONE;
 
-
+const worker = new Worker();
 const globalStorage = GlobalStorage.getInstance();
 const errorsControl = {};
 
-export const onChange = ({ target }) => {
-    const { value } = target;
-    
+const format = ({ value }) => {
     const onlyAmount = value.replace(/[^0-9.]/g, '');
-    const actualAmount = onlyAmount.replace(/^(\d+\.?)(\d{1,8})?(\d+)?$|^(\.\d+)$/, (match, p1, p2, p3, p4) => {
-        if (p4) {
-            return `0${p4}`;
+    const amount = onlyAmount.replace(/^((?:0)(\d+)|(?<!0)(\d+))?(\.)?(\d{1,2})?(\d+)?$/, (str, p1, p2, p3, p4, p5) => {
+        if (p1 && p2 && !p4 && !p5) {
+            return `0.${p2}`;
         }
-
-        if (p1 && p2) {
-            return p1 + p2;
+        
+        if (!p1 && p4 && p5) {
+            return `0${p4}${p5}`;
         }
-
-        return p1;
+        
+        if (p1 && p3 && !p4 && !p5) {
+            return str;
+        }
+        
+        if (p1 && p4 && p5) {
+            return `${p1}${p4}${p5}`;
+        }
+        
+        return str;
     });
 
-    console.log(actualAmount)
+    return amount;
+};
+
+export const onChange = ({ target }) => {
+    const value = format(target);
+    
     globalStorage.store({
-        [AMOUNTVALUEFEUDAL]: actualAmount,
+        [AMOUNTVALUEIN]: value,
     });
+
+    worker.getCoinConvertAmount();
 };
 
 export const onPaste = ({ target }) => {
-    // worker.handyman({
-    //     phone: target.value,
-    // }, callback);
+    const value = format(target);
+    
+    globalStorage.store({
+        [AMOUNTVALUEIN]: value,
+    });
+
+    worker.getCoinConvertAmount();
 };
 
 export const onFocus = () => {
@@ -71,7 +91,7 @@ export const onBlur = ({ target }) => {
 export const onSelected = ({ short_name: s_name }) => {
     const store = globalStorage.store();
 
-    const { short_name } = store[AMOUNTFEUDALCURRENCY].find(({ short_name }) => short_name === s_name);
+    const { short_name } = store[AMOUNTFIATCURRENCY].find(({ short_name }) => short_name === s_name);
 
     globalStorage.store({
         [AMOUNTCURRENCYFIAT]: short_name,

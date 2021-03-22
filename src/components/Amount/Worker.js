@@ -1,44 +1,79 @@
 // requests
-import { MobGetCurrenciesInfo } from '@requests';
+import { MobGetCurrenciesInfo, GetCoinConvertAmount } from '@requests';
 
 // storage
 import { GlobalStorage } from '@storage';
 
 // constants
-import { STORAGE } from '../../constants.json';
+import { STORAGE, XHR } from '../../constants.json';
 
-const {
-    AMOUNTFEUDALCURRENCY,
+const 
+{
+    AMOUNTVALUEIN,
+    AMOUNTVALUECRYPTO,
+    AMOUNTFIATCURRENCY,
     AMOUNTCRYPTOCURRENCY,
-} = STORAGE;
+    AMOUNTCURRENCYFIAT,
+    AMOUNTCURRENCYCRYPTO,
+} = STORAGE,
+{
+    DONE,
+    HEADERS_RECEIVED,
+    LOADING,
+    OPENED,
+    UNSENT
+} = XHR;
 
-const mobGetCurrenciesInfo = MobGetCurrenciesInfo.getInstance();
+const 
+mobGetCurrenciesInfo = MobGetCurrenciesInfo.getInstance(),
+getCoinConvertAmount = GetCoinConvertAmount.getInstance();
 const globalStorage = GlobalStorage.getInstance();
 
 export const Worker = class {
-    constructor() {
-        this.mobGetCurrenciesInfo();
-    }
-
     mobGetCurrenciesInfo() {
         const store = globalStorage.store();
 
-        if (!store[AMOUNTFEUDALCURRENCY].length && !store[AMOUNTCRYPTOCURRENCY].length) {
-            const
-            successCallback = ({ data }) => {
+        if (!store[AMOUNTFIATCURRENCY].length && !store[AMOUNTCRYPTOCURRENCY].length) {
+            const successCallback = ({ data }) => {
                 const { result } = JSON.parse(data);
 
                 globalStorage.store({
-                    [AMOUNTFEUDALCURRENCY]: result.filter(({ cur_id, volume }) => cur_id < 100 && volume === undefined),
+                    [AMOUNTFIATCURRENCY]: result.filter(({ cur_id, volume }) => cur_id < 100 && volume === undefined),
                     [AMOUNTCRYPTOCURRENCY]: result.filter(({ cur_id }) => cur_id >= 100),
                 });
-            },
-            failedCallback = () => {
-                this._mobGetCurrenciesInfo_startRequest = true;
-                this._mobGetCurrenciesInfo();
             };
             
-            mobGetCurrenciesInfo.request().response({ successCallback, failedCallback });
+            mobGetCurrenciesInfo.request().response({ successCallback, failedCallback: this.mobGetCurrenciesInfo });
         }
+    }
+
+    getCoinConvertAmount({ partner } = {}) {
+        const onReadyChange = ({ readyState, status }) => {
+            if ([OPENED, HEADERS_RECEIVED, LOADING].some(item => item === readyState)) {
+                globalStorage.store({
+                    [AMOUNTVALUECRYPTO]: 'Wait...',
+                });
+            }
+        };
+
+        const store = globalStorage.store();
+        const req = {
+            currencyIn: store[AMOUNTCURRENCYFIAT],
+            currencyOut: store[AMOUNTCURRENCYCRYPTO],
+            amount: store[AMOUNTVALUEIN],
+            onReadyChange,
+        };
+
+        if (partner) {
+            req.partner = partner;
+        }
+
+        const successCallback = ({ data }) => {
+            globalStorage.store({
+                [AMOUNTVALUECRYPTO]: data == 0 ? '' : data,
+            });
+        };
+
+        getCoinConvertAmount.request(req).response({ successCallback });
     }
 };

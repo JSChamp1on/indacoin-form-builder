@@ -31,23 +31,44 @@ export const MobGetCurrenciesInfo = class extends BaseRequest {
         this.promise = null;
     }
 
-    request() {
+    request({ onReadyChange: readyChange, onProgress: progress } = {}) {
         const url = `https://indacoin.com/api/uni/mobgetcurrenciesinfoi/1`;
 
-        const onReadyChange = ({ readyState, status }) => requestStorage.store({
-            [MOBGETCURRENCIESINFO]: {
-                ...requestStorage.store()[MOBGETCURRENCIESINFO],
-                readyState,
-                status,
-            },
-        });
-        const onProgress = ({ percent, byte }) => requestStorage.store({
-            [MOBGETCURRENCIESINFO]: {
-                ...requestStorage.store()[MOBGETCURRENCIESINFO],
-                percent,
-                byte,
-            },
-        });
+        const onReadyChange = ({ readyState, status }) => {
+            requestStorage.store({
+                [MOBGETCURRENCIESINFO]: {
+                    ...requestStorage.store()[MOBGETCURRENCIESINFO],
+                    readyState,
+                    status,
+                },
+            });
+
+            console.log()
+
+            if (typeof readyChange === 'function') {
+                readyChange({
+                    readyState,
+                    status,
+                });
+            }
+        };
+
+        const onProgress = ({ percent, byte }) => {
+            requestStorage.store({
+                [MOBGETCURRENCIESINFO]: {
+                    ...requestStorage.store()[MOBGETCURRENCIESINFO],
+                    percent,
+                    byte,
+                },
+            });
+
+            if (typeof progress === 'function') {
+                progress({
+                    percent,
+                    byte,
+                });
+            }
+        };
 
         this.promise = new Promise((resolve, reject) => this.get({
             url,
@@ -59,12 +80,14 @@ export const MobGetCurrenciesInfo = class extends BaseRequest {
     }
 
     response({ successCallback, failedCallback }) {
-        if (typeof successCallback === 'function') {
-            this.promise.then(successCallback);
-        }
-        
-        if (typeof failedCallback === 'function') {
-            this.promise.catch(failedCallback);
+        if (this.promise) {
+            if (typeof successCallback === 'function') {
+                this.promise.then(successCallback);
+            }
+            
+            if (typeof failedCallback === 'function') {
+                this.promise.catch(failedCallback);
+            }
         }
     }
 };

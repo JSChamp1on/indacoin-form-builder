@@ -13,9 +13,9 @@ import { event } from '.';
 import { STORAGE, OPTIONS } from '../../constants.json';
 const 
 {
-    AMOUNTFEUDALCURRENCY,
+    AMOUNTFIATCURRENCY,
     AMOUNTCRYPTOCURRENCY,
-    AMOUNTVALUEFEUDAL,
+    AMOUNTVALUEIN,
     AMOUNTVALUECRYPTO,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
@@ -53,8 +53,8 @@ const Input = class extends Component {
         }
         
         this.setState({
-            items: state[AMOUNTFEUDALCURRENCY],
-            value: state[AMOUNTVALUEFEUDAL],
+            items: state[AMOUNTFIATCURRENCY],
+            value: state[AMOUNTVALUEIN],
             currency: state[AMOUNTCURRENCYFIAT],
         });
     }

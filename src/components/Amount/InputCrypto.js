@@ -13,9 +13,9 @@ import { event } from '.';
 import { STORAGE, OPTIONS } from '../../constants.json';
 const 
 {
-    AMOUNTFEUDALCURRENCY,
+    AMOUNTFIATCURRENCY,
     AMOUNTCRYPTOCURRENCY,
-    AMOUNTVALUEFEUDAL,
+    AMOUNTVALUEIN,
     AMOUNTVALUECRYPTO,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
@@ -63,6 +63,7 @@ const Input = class extends Component {
         const
         {
             label,
+            disabled = true,
         } = this.props,
         {
             items,
@@ -92,6 +93,7 @@ const Input = class extends Component {
                 onPaste={event.cryptocurrency.onPaste}
                 onFocus={event.cryptocurrency.onFocus}
                 onBlur={event.cryptocurrency.onBlur}
+                disabled={disabled}
             />
         );
     }
