@@ -5,7 +5,7 @@ import { Worker } from '.';
 import { GlobalStorage } from '@storage';
 
 // constants
-import { STORAGE, PHONE } from '../../constants.json';
+import { STORAGE } from '../../constants.json';
 const 
 {
     AMOUNTVALUEIN,
@@ -14,16 +14,8 @@ const
     AMOUNTCRYPTOCURRENCY,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
-} = STORAGE,
-{
-    // INVALID_COUNTRY_CODE,
-    // INVALID_LENGTH,
-    // IS_POSSIBLE,
-    // IS_POSSIBLE_LOCAL_ONLY,
-    // TOO_LONG,
-    // TOO_SHORT,
-    // BLOCKED_COUNTRY,
-} = PHONE;
+} = STORAGE;
+
 
 const worker = new Worker();
 const globalStorage = GlobalStorage.getInstance();
@@ -74,19 +66,9 @@ export const onPaste = ({ target }) => {
     worker.getCoinConvertAmount();
 };
 
-export const onFocus = () => {
-    // storage.store({
-    //     [PHONEVALUE]: storage.store()[PHONEINTERNATIONALFORMAT],
-    // });
-};
+export const onFocus = () => {};
 
-export const onBlur = ({ target }) => {
-    // const store = storage.store();
-
-    // worker.handyman({
-    //     phone: target.value,
-    // }, store => callback(store, true));
-};
+export const onBlur = () => {};
 
 export const onSelected = ({ short_name: s_name }) => {
     const store = globalStorage.store();
@@ -96,28 +78,8 @@ export const onSelected = ({ short_name: s_name }) => {
     globalStorage.store({
         [AMOUNTCURRENCYFIAT]: short_name,
     });
+
+    worker.getCoinConvertAmount();
 };
 
-export const onError = ({ id } = { id: null }) => {
-    // const store = storage.store();
-
-    // if (id !== null) {
-    //     if (errorsControl[id] === undefined) {
-    //         errorsControl[id] = false;
-    //     }
-
-    //     if (store[PHONEERRORSTRING] === IS_POSSIBLE) {
-    //         errorsControl[id] = true;
-    //     }
-
-    //     if (!errorsControl[id]) {
-    //         return '';
-    //     }
-    // }
-    
-    // if (store[PHONEERRORSTRING] === IS_POSSIBLE) {
-    //     return '';
-    // }
-
-    // return store[PHONEERRORSTRING];
-};
+export const onError = ({ id } = { id: null }) => {};

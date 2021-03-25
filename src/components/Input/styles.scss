@@ -42,6 +42,7 @@
             line-height: 44px;
             font-size: 18px;
             color: #d2d2d2;
+            cursor: text;
             transition: 
                 line-height .15s ease .15s,
                 font-size .15s,
@@ -56,6 +57,7 @@
             line-height: 12px;
             font-size: 12px;
             color: #888;
+            cursor: default;
             transition: 
                 line-height .15s,
                 top .15s,

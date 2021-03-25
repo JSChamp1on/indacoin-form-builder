@@ -48,20 +48,11 @@ export const Worker = class {
     }
 
     getCoinConvertAmount({ partner } = {}) {
-        const onReadyChange = ({ readyState, status }) => {
-            if ([OPENED, HEADERS_RECEIVED, LOADING].some(item => item === readyState)) {
-                globalStorage.store({
-                    [AMOUNTVALUECRYPTO]: 'Wait...',
-                });
-            }
-        };
-
         const store = globalStorage.store();
         const req = {
             currencyIn: store[AMOUNTCURRENCYFIAT],
             currencyOut: store[AMOUNTCURRENCYCRYPTO],
             amount: store[AMOUNTVALUEIN],
-            onReadyChange,
         };
 
         if (partner) {

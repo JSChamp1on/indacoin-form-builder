@@ -107,6 +107,7 @@ const Input = class extends Component {
     renderInput() {
         const {
             label,
+            type = 'text',
             value,
             onChange,
             onPaste,
@@ -118,7 +119,7 @@ const Input = class extends Component {
         return <>
             <input
                 ref={this.inputRef}
-                type={'text'}
+                type={type}
                 className={value ? styles.used : null}
                 style={{
                     width: (

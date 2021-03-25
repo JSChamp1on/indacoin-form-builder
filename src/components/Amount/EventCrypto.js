@@ -1,72 +1,62 @@
+// worker
+import { Worker } from '.';
+
 // storage
 import { GlobalStorage } from '@storage';
 
 // constants
-import { STORAGE, PHONE } from '../../constants.json';
+import { STORAGE } from '../../constants.json';
 
 const 
 {
     AMOUNTVALUEIN,
+    AMOUNTVALUEOUT,
+
     AMOUNTVALUECRYPTO,
     AMOUNTFIATCURRENCY,
     AMOUNTCRYPTOCURRENCY,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
-} = STORAGE,
-{
-    // INVALID_COUNTRY_CODE,
-    // INVALID_LENGTH,
-    // IS_POSSIBLE,
-    // IS_POSSIBLE_LOCAL_ONLY,
-    // TOO_LONG,
-    // TOO_SHORT,
-    // BLOCKED_COUNTRY,
-} = PHONE;
+    AMOUNTONREADYCHANGE,
+} = STORAGE;
 
 
+const worker = new Worker();
 const globalStorage = GlobalStorage.getInstance();
 const errorsControl = {};
 
-export const onChange = ({ target }) => {
-    const { value } = target;
-    
-    const onlyAmount = value.replace(/[^0-9.]/g, '');
-    const actualAmount = onlyAmount.replace(/^(\d+\.?)(\d{1,8})?(\d+)?$|^(\.\d+)$/, (match, p1, p2, p3, p4) => {
-        if (p4) {
-            return `0${p4}`;
+const format = ({ value }) => {
+    const onlyNumbers = value.replace(/[^0-9.]/g, '');
+    const amount = onlyNumbers.replace(/^((?:0)(\d+)|(?<!0)(\d+))?(\.)?(\d{1,8})?(\d+)?$/, (str, p1, p2, p3, p4, p5) => {
+        if (p1 && p2 && !p4 && !p5) {
+            return `0.${p2}`;
         }
-
-        if (p1 && p2) {
-            return p1 + p2;
+        
+        if (!p1 && p4 && p5) {
+            return `0${p4}${p5}`;
         }
-
-        return p1;
+        
+        if (p1 && p3 && !p4 && !p5) {
+            return str;
+        }
+        
+        if (p1 && p4 && p5) {
+            return `${p1}${p4}${p5}`;
+        }
+        
+        return str;
     });
 
-    globalStorage.store({
-        [AMOUNTVALUECRYPTO]: actualAmount,
-    });
+    return amount;
 };
 
-export const onPaste = ({ target }) => {
-    // worker.handyman({
-    //     phone: target.value,
-    // }, callback);
-};
+export const onChange = () => {};
 
-export const onFocus = () => {
-    // storage.store({
-    //     [PHONEVALUE]: storage.store()[PHONEINTERNATIONALFORMAT],
-    // });
-};
+export const onPaste = () => {};
 
-export const onBlur = ({ target }) => {
-    // const store = storage.store();
+export const onFocus = () => {};
 
-    // worker.handyman({
-    //     phone: target.value,
-    // }, store => callback(store, true));
-};
+export const onBlur = () => {};
 
 export const onSelected = ({ short_name: s_name }) => {
     const store = globalStorage.store();
@@ -76,28 +66,8 @@ export const onSelected = ({ short_name: s_name }) => {
     globalStorage.store({
         [AMOUNTCURRENCYCRYPTO]: short_name,
     });
+
+    worker.getCoinConvertAmount();
 };
 
-export const onError = ({ id } = { id: null }) => {
-    // const store = storage.store();
-
-    // if (id !== null) {
-    //     if (errorsControl[id] === undefined) {
-    //         errorsControl[id] = false;
-    //     }
-
-    //     if (store[PHONEERRORSTRING] === IS_POSSIBLE) {
-    //         errorsControl[id] = true;
-    //     }
-
-    //     if (!errorsControl[id]) {
-    //         return '';
-    //     }
-    // }
-    
-    // if (store[PHONEERRORSTRING] === IS_POSSIBLE) {
-    //     return '';
-    // }
-
-    // return store[PHONEERRORSTRING];
-};
+export const onError = () => {};

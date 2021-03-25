@@ -24,10 +24,16 @@ const
     AMOUNTCRYPTOCURRENCY,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
+    // Email
+    EMAILVALUE,
+    EMAILERRORSTRING,
+    // CardNumber
+    CARDNUMBERVALUE,
+    CARDNUMBERERRORSTRING,
 } = STORAGE;
 
-let instance = null;
 
+let instance = null;
 
 export const GlobalStorage = class extends Methods {
     /**
@@ -64,6 +70,12 @@ export const GlobalStorage = class extends Methods {
             [AMOUNTCRYPTOCURRENCY]: [],
             [AMOUNTCURRENCYFIAT]: '',
             [AMOUNTCURRENCYCRYPTO]: '',
+            // Email
+            [EMAILVALUE]: '',
+            [EMAILERRORSTRING]: '',
+            // CardNumber
+            [CARDNUMBERVALUE]: '',
+            [CARDNUMBERERRORSTRING]: '',
         };
 
         this.callbacks = [];

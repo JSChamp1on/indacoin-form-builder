@@ -27,7 +27,7 @@ const {
 } = PHONE;
 
 
-const storage = GlobalStorage.getInstance();
+const globalStorage = GlobalStorage.getInstance();
 
 export const Worker = class {
     constructor() {
@@ -39,7 +39,7 @@ export const Worker = class {
 
         this.regexp = number => String(number).replace(/\D/g, '');
 
-        storage.store({ [PHONEALLCOUNTRIES]: allCountries });
+        globalStorage.store({ [PHONEALLCOUNTRIES]: allCountries });
     }
 
     updateBlockedCountries({ countries }) {
@@ -52,7 +52,6 @@ export const Worker = class {
         // phone handling
         if (phone) {
             const { name, alpha2, dialCode } = this.country({ phone });
-            const errorString = this.isValidError({ phone, alpha2 });
             const errorBoolean = this.isValidBool({ phone });
             const nationalFormat = this.nationalFormat({ phone });
             const internationalFormat = this.internationalFormat({ phone });
@@ -61,7 +60,6 @@ export const Worker = class {
             store[PHONEALPHA2] = alpha2;
             store[PHONECOUNTRY] = name;
             store[PHONEDIALCODE] = dialCode;
-            store[PHONEERRORSTRING] = errorString;
             store[PHONEERRORBOOLEAN] = errorBoolean;
             store[PHONENATIONALFORMAT] = nationalFormat;
             store[PHONEINTERNATIONALFORMAT] = internationalFormat;
@@ -81,7 +79,7 @@ export const Worker = class {
         }
         
         const mergeStore = {
-            ...storage.store(),
+            ...globalStorage.store(),
             ...store,
         };
 
@@ -95,7 +93,7 @@ export const Worker = class {
             return mergeStore;
         }
 
-        return storage.store(mergeStore);
+        return globalStorage.store(mergeStore);
     }
 
     readCode({ alpha2 }) {
@@ -103,9 +101,9 @@ export const Worker = class {
             return null;
         }
 
-        const { name, dialCode } = storage.store()[PHONEALLCOUNTRIES].find(({ iso2 }) => iso2 === alpha2.toLowerCase()) || {};
+        const { name, dialCode } = globalStorage.store()[PHONEALLCOUNTRIES].find(({ iso2 }) => iso2 === alpha2.toLowerCase()) || {};
 
-        if (storage.store()[PHONEBLOCKEDCOUNTRIES].find(item => String(item).toLowerCase() === alpha2.toLowerCase())) {
+        if (globalStorage.store()[PHONEBLOCKEDCOUNTRIES].find(item => String(item).toLowerCase() === alpha2.toLowerCase())) {
             return {};
         }
 
@@ -128,7 +126,7 @@ export const Worker = class {
 
             return codeGlobaly && (codeCountry || areaCodes === null);
         };
-        const { name, iso2, dialCode } = storage.store()[PHONEALLCOUNTRIES].sort(sort).find(find) || {name: '', iso2: '', dialCode: ''};
+        const { name, iso2, dialCode } = globalStorage.store()[PHONEALLCOUNTRIES].sort(sort).find(find) || {name: '', iso2: '', dialCode: ''};
 
         return {
             name,
@@ -188,32 +186,24 @@ export const Worker = class {
         if (!alpha2) {
             alpha2 = this.country({ phone: number }).alpha2;
         }
-        errorCode = storage.store()[PHONEBLOCKEDCOUNTRIES].find(item => `${item}`.toLowerCase() === alpha2) ? BLOCKED_COUNTRY : errorCode;
 
-        let errorStatus = null;
+        errorCode = globalStorage.store()[PHONEBLOCKEDCOUNTRIES].find(item => `${item}`.toLowerCase() === alpha2) ? BLOCKED_COUNTRY : errorCode;
+
         switch (errorCode) {
             case CODE_INVALID_COUNTRY_CODE:
-                errorStatus = INVALID_COUNTRY_CODE;
-                break;
+                return INVALID_COUNTRY_CODE;
             case CODE_INVALID_LENGTH:
-                errorStatus = INVALID_LENGTH;
-                break;
+                return INVALID_LENGTH;
             case CODE_IS_POSSIBLE:
-                errorStatus = IS_POSSIBLE;
-                break;
+                return IS_POSSIBLE;
             case CODE_IS_POSSIBLE_LOCAL_ONLY:
-                errorStatus = IS_POSSIBLE_LOCAL_ONLY;
-                break;
+                return IS_POSSIBLE_LOCAL_ONLY;
             case CODE_TOO_LONG:
-                errorStatus = TOO_LONG;
-                break;
+                return TOO_LONG;
             case CODE_TOO_SHORT:
-                errorStatus = TOO_SHORT;
-                break;
+                return TOO_SHORT;
             case BLOCKED_COUNTRY:
-                errorStatus = BLOCKED_COUNTRY;
+                return BLOCKED_COUNTRY;
         }
-
-        return errorStatus;
     }
 };

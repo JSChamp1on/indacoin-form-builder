@@ -5,9 +5,11 @@ import React, { Component } from 'react';
 import styles from './styles.scss';
 
 // components
-import { Input as BasicInput } from '@components/Input';
-import { GlobalStorage } from '@storage';
 import { event } from '.';
+import { Input as BasicInput } from '@components/Input';
+
+// storage
+import { GlobalStorage } from '@storage';
 
 // constants
 import { STORAGE, OPTIONS } from '../../constants.json';
@@ -45,13 +47,6 @@ const Input = class extends Component {
     }
 
     subscription(state) {
-        const { target, onError } = this.props;
-        let error = event.fiatcurrency.onError({ id: 1 });
-
-        if (typeof onError === 'function') {
-            error = onError(error) || error;
-        }
-        
         this.setState({
             items: state[AMOUNTFIATCURRENCY],
             value: state[AMOUNTVALUEIN],

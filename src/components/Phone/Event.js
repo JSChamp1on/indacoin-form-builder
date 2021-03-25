@@ -30,79 +30,82 @@ const
 
 
 const worker = new Worker();
-const storage = GlobalStorage.getInstance();
-const errorsControl = {};
+const globalStorage = GlobalStorage.getInstance();
+let valid = null;
 
-const callback = (store, nationalFormatBool = false) => {
-    storage.store({
-        ...store,
-        [PHONEVALUE]: (
-            nationalFormatBool
-            ? (
-                store[PHONEERRORSTRING] === IS_POSSIBLE
-                ? store[PHONENATIONALFORMAT]
-                : store[PHONEINTERNATIONALFORMAT]
-            )
-            : store[PHONEINTERNATIONALFORMAT]
-        ).replace(/^\+(?!.+)$/, ''),
-    });
-};
+const errorStatus = (store) => worker.isValidError({
+    phone: store[PHONENUMBER],
+    alpha2: store[PHONEALPHA2],
+});
+
+const check = (store) => errorStatus(store) === IS_POSSIBLE;
+
+const format = (store) => globalStorage.store({
+    ...store,
+    [PHONEVALUE]: store[PHONEINTERNATIONALFORMAT].replace(/^\+(?!.+)$/, ''),
+});
 
 export const onChange = ({ target }) => {
-    worker.handyman({
-        phone: target.value,
-    }, callback);
+    const store = worker.handyman({ phone: target.value }, format);
+    const strStatus = errorStatus(store);
+    const bool = check(store);
+    
+    globalStorage.store({
+        [PHONEERRORSTRING]: valid === null ? '' : strStatus,
+    });
+
+    if (bool) {
+        valid = strStatus;
+    }
 };
 
 export const onPaste = ({ target }) => {
-    worker.handyman({
-        phone: target.value,
-    }, callback);
+    const store = worker.handyman({ phone: target.value }, format);
+    const strStatus = errorStatus(store);
+    const bool = check(store);
+    
+    globalStorage.store({
+        [PHONEERRORSTRING]: strStatus,
+    });
+
+    if (!bool) {
+        valid = strStatus;
+    }
 };
 
 export const onFocus = () => {
-    storage.store({
-        [PHONEVALUE]: storage.store()[PHONEINTERNATIONALFORMAT],
+    globalStorage.store({
+        [PHONEVALUE]: globalStorage.store()[PHONEINTERNATIONALFORMAT],
+        [PHONEERRORSTRING]: '',
     });
 };
 
 export const onBlur = ({ target }) => {
-    const store = storage.store();
+    const store = worker.handyman({ phone: target.value });
+    const strStatus = errorStatus(store);
 
-    worker.handyman({
-        phone: target.value,
-    }, store => callback(store, true));
+    globalStorage.store({
+        [PHONEVALUE]: globalStorage.store()[PHONENATIONALFORMAT],
+        [PHONEERRORSTRING]: target.value === '' ? '' : strStatus,
+    });
+    
+    valid = null;
 };
 
 export const onSelected = ({ dialCode }) => {
-    const store = storage.store();
-    const code = store[PHONEDIALCODE];
-    const number = store[PHONENUMBER];
-    worker.handyman({
-        phone: number.replace(new RegExp(`^${code}`), dialCode),
-    }, store => callback(store, true));
+    const oldStore = globalStorage.store();
+    const oldCode = oldStore[PHONEDIALCODE];
+    const oldNumber = oldStore[PHONENUMBER];
+
+    const newNember = oldNumber.replace(new RegExp(`^${oldCode}`), dialCode);
+
+    const newStore = worker.handyman({ phone: newNember });
+    
+    globalStorage.store({
+        [PHONEVALUE]: newStore[PHONENATIONALFORMAT],
+    });
 };
 
-export const onError = ({ id } = { id: null }) => {
-    const store = storage.store();
-
-    if (id !== null) {
-        if (errorsControl[id] === undefined) {
-            errorsControl[id] = false;
-        }
-
-        if (store[PHONEERRORSTRING] === IS_POSSIBLE) {
-            errorsControl[id] = true;
-        }
-
-        if (!errorsControl[id]) {
-            return '';
-        }
-    }
-    
-    if (store[PHONEERRORSTRING] === IS_POSSIBLE) {
-        return '';
-    }
-
-    return store[PHONEERRORSTRING];
+export const onError = () => {
+    return globalStorage.store()[PHONEERRORSTRING];
 };

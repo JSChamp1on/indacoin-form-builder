@@ -9,8 +9,8 @@ const
     MOBGETCURRENCIESINFO,
 } = REQUESTS;
 
-let instance = null;
 
+let instance = null;
 
 export const RequestsStorage = class extends Methods {
     /**

@@ -5,12 +5,15 @@ import React, { Component } from 'react';
 import styles from './styles.scss';
 
 // components
-import { Input as BasicInput } from '@components/Input';
-import { GlobalStorage } from '@storage';
 import { event } from '.';
+import { Input as BasicInput } from '@components/Input';
+import { Ellipsis } from '@components/Ellipsis';
+
+// storage
+import { GlobalStorage, RequestsStorage } from '@storage';
 
 // constants
-import { STORAGE, OPTIONS } from '../../constants.json';
+import { STORAGE, OPTIONS, REQUESTS, XHR } from '../../constants.json';
 const 
 {
     AMOUNTFIATCURRENCY,
@@ -19,10 +22,17 @@ const
     AMOUNTVALUECRYPTO,
     AMOUNTCURRENCYFIAT,
     AMOUNTCURRENCYCRYPTO,
-} = STORAGE;
+} = STORAGE,
+{
+    GETCOINCONVERTAMOUNT,
+} = REQUESTS,
+{
+    DONE,
+} = XHR;
+
 
 const globalStorage = GlobalStorage.getInstance();
-
+const requestsStorage = RequestsStorage.getInstance();
 
 const Input = class extends Component {
     constructor() {
@@ -33,29 +43,39 @@ const Input = class extends Component {
             value: '',
             currency: '',
             error: '',
+            loading: null,
         };
     }
 
     componentDidMount() {
-        globalStorage.subscription = this.subscription.bind(this);
+        globalStorage.subscription = this.subscriptionGlobalStorage.bind(this);
+        requestsStorage.subscription = this.subscriptionRequestsStorage.bind(this);
     }
 
     componentWillUnmount() {
-        globalStorage.removeSubscription(this.subscription);
+        globalStorage.removeSubscription(this.subscriptionGlobalStorage);
+        requestsStorage.removeSubscription(this.subscriptionRequestsStorage);
     }
 
-    subscription(state) {
-        const { target, onError } = this.props;
-        let error = event.cryptocurrency.onError({ id: 1 });
-
-        if (typeof onError === 'function') {
-            error = onError(error) || error;
-        }
-        
+    subscriptionGlobalStorage(state) {
         this.setState({
             items: state[AMOUNTCRYPTOCURRENCY],
             value: state[AMOUNTVALUECRYPTO],
             currency: state[AMOUNTCURRENCYCRYPTO],
+        });
+    }
+
+    subscriptionRequestsStorage(state) {
+        const { readyState, status } = state[GETCOINCONVERTAMOUNT];
+        
+        this.setState({
+            loading: (
+                readyState === DONE && status === 200 || !readyState && status === 0
+                    ? null 
+                    : status !== 200 && status !== 0
+                        ? '☹' 
+                        : <Ellipsis/>
+            ),
         });
     }
 
@@ -70,12 +90,13 @@ const Input = class extends Component {
             value,
             currency,
             error,
+            loading,
         } = this.state;
 
         return (
             <BasicInput
                 button={currency}
-                label={`${label || 'Amount'}`}
+                label={loading || `${label || 'Amount'}`}
                 positionMenu={OPTIONS.POSITIONMENURIGHT}
                 items={items}
                 render={({ short_name }) => {

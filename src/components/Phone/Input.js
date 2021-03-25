@@ -21,7 +21,7 @@ const
     PHONEALPHA2,
     PHONECOUNTRY,
     // PHONEDIALCODE,
-    // PHONEERRORSTRING,
+    PHONEERRORSTRING,
     // PHONEERRORBOOLEAN,
     // PHONENATIONALFORMAT,
     // PHONEINTERNATIONALFORMAT,
@@ -51,18 +51,11 @@ const Input = class extends Component {
     }
 
     subscription(state) {
-        const { onError } = this.props;
-        let error = event.onError({ id: 1 });
-        
-        if (typeof onError === 'function') {
-            error = onError(error) || error;
-        }
-
         this.setState({
             value: state[PHONEVALUE],
             country: state[PHONECOUNTRY],
             alpha2: state[PHONEALPHA2],
-            error,
+            error: state[PHONEERRORSTRING],
         });
     }
 

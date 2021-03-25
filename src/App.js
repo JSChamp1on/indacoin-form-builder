@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 // components
 import { Input as Phone } from '@components/Phone';
 import { Input as Amount } from '@components/Amount';
+import { Input as Email } from '@components/Email';
+import { Input as CardNumber } from '@components/CardNumber';
 
 
 // const globalStorage = GlobalStorage.getInstance();
@@ -27,6 +29,8 @@ const App = class extends Component {
             <Phone/>
             <Amount.fiatcurrency/>
             <Amount.cryptocurrency/>
+            <Email/>
+            <CardNumber/>
         </>;
     }
 };
